@@ -1,0 +1,61 @@
+class Solution {
+public:
+    string predictPartyVictory(string senate) {
+      string s="";
+      queue<char> r,d;
+      int rcount=0,dcount=0,n=senate.length();
+      for(int i=0;i<n;i++)
+          {
+              if(senate[i]=='R')
+              rcount++;
+              else
+              dcount++;
+          }
+      while(1)
+      {
+          s="";
+          n=senate.length();          
+          if(dcount==0)
+          return "Radiant";
+          else if(rcount==0)
+          return "Dire";
+          for(int i=0;i<n;i++)
+          {
+              cout<<senate[i]<<rcount<<dcount<<"  ";
+              if(rcount==1 && dcount>1)
+              return "Dire";
+              else if(dcount==1 && rcount>1)
+              return "Radiant";
+              if(senate[i]=='R')
+              {
+                  if(d.empty())
+                  {
+                      r.push('R');
+                      dcount--;
+                      s+='R';
+                  }
+                  else
+                  {
+                      d.pop();
+                  }
+              }
+              else
+              {
+                  if(r.empty())
+                  {
+                      d.push('D');
+                      rcount--;
+                      s+='D';
+                  }
+                  else
+                  {
+                      r.pop();
+                  }
+              }
+          }
+          senate=s;
+          cout<<endl;
+      } 
+      return "OK"; 
+    }
+};
