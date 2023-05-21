@@ -1,0 +1,52 @@
+class Solution {
+public:
+
+    vector<pair<int,int>> dirs = {{1,0}, {-1,0}, {0,1}, {0,-1}};
+    size_t n;
+
+    void construct_boarder(vector<vector<int>>& grid, const int i0, const int j0, vector<pair<int,int>>& boarder) {
+        queue<pair<int,int>> q;
+        q.push({i0,j0});
+        grid[i0][j0] = 2;
+        while (!q.empty()) {
+            const auto p = q.front();
+            q.pop();
+            bool is_boarder = false;
+            for (const auto dir: dirs) {
+                const int i = p.first + dir.first;
+                const int j = p.second + dir.second;
+                if ((i<n) && (i>=0) && (j<n) && (j>=0)) {
+                    if (grid[i][j]==0) is_boarder = true;
+                    else if (grid[i][j]==1) {
+                        q.push({i,j});
+                        grid[i][j]=2;
+                    }
+                }
+            }
+            if (is_boarder) boarder.push_back({p.first, p.second});
+        }
+    }
+
+    int shortestBridge(vector<vector<int>>& grid) {
+        vector<pair<int,int>> boarder1;
+        vector<pair<int,int>> boarder2;
+        n = grid.size();
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                if (grid[i][j]==1) {
+                    if (boarder1.size()==0) construct_boarder(grid, i, j, boarder1);
+                    else if (boarder2.size()==0) construct_boarder(grid, i, j, boarder2);
+                    else assert(false);
+                }
+            }
+        }
+
+        int res = INT_MAX;
+        for (const auto p1: boarder1) {
+            for (const auto p2: boarder2) {
+                res = min(res, abs(p1.first-p2.first) + abs(p1.second-p2.second) - 1);
+            }
+        }
+        return res;
+    }
+};
