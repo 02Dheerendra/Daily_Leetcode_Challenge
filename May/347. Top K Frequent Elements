@@ -1,0 +1,24 @@
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        vector<pair<int,int>> pq(20000);
+        for(int i=0;i<20000;i++)
+        {
+            pq[i].first=i+1+10000;
+            pq[i].second=0;
+        }
+        for(int &num:nums)
+        {
+            (pq[num-1+10000].second)++;
+        }
+        sort(pq.begin(),pq.end(),[](auto &left, auto &right) {
+    return left.second > right.second;
+});
+        vector<int> ans(k);
+        for(int i=0;i<k;i++)
+        {
+            ans[i]=pq[i].first-20000;
+        }
+        return ans;
+    }
+};
