@@ -1,0 +1,30 @@
+class Solution {
+public:
+    long long maxScore(vector<int>& nums1, vector<int>& nums2, int k) {
+        vector<pair<int,int>> p;
+        int n=nums1.size(),i=0,j=0;
+        long long sum=0,ans=INT_MIN;
+        for(i=0;i<nums1.size();i++)
+        {
+            p.push_back({nums2[i],nums1[i]});
+        }
+        sort(p.begin(),p.end(),[](const pair<int,int>& left ,const pair<int,int>& right){return right.first<left.first;});
+        priority_queue<int,vector<int>,greater<int>>pq;
+        for(const pair<int,int>&pair:p)
+        {
+            pq.push(pair.second);
+            sum+=pair.second;
+            if(pq.size()>k)
+            {
+                sum-=pq.top();
+                pq.pop();
+            }
+            if(pq.size()==k)
+            {
+                ans=max(ans,sum*pair.first);
+            }
+        }
+        return ans;
+
+    }
+};
